@@ -24,20 +24,31 @@ const bookInfoFromForm = () => {
     let title = document.querySelector("#title").value;
     let author = document.querySelector("#author").value;
     let pages = document.querySelector("#pages").value;
-    let readStatus = document.querySelector("#bookReadStatus").value;
+    let isRead = document.querySelector("#isRead").value;
     let id = myLibrary.length + 1;
-    return [title, author, pages, readStatus];
+    return [title, author, pages, isRead];
 }
 
 
 form.addEventListener('submit', (e) => {
 	e.preventDefault(); 
     const values = [...form.elements].map(elem => elem.value);
+    let isRead = document.querySelector("#isRead").checked;
     const id = myLibrary.length + 1;
-    const [title, author, pages, status] = values;
-    const book = new Book(id, title, author, pages, status);
+    const [title, author, pages] = values;
+    const book = new Book(id, title, author, pages, isRead);
+    $('#bookInfoForm').modal('toggle');
     form.reset();
-    myLibrary.push(book);
+    if (book.title) {
+        myLibrary.push(book);
+        VanillaToasts.create({
+              title: 'Book Created',
+              text: `${title} by ${author}`,
+              timeout: 3000
+            });
+            
+    }
+    
     render();
 });
 
